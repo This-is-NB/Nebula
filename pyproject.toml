@@ -41,9 +41,9 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/This-is-NB/PySurf"
-Repository = "https://github.com/This-is-NB/PySurf"
-Issues = "https://github.com/This-is-NB/PySurf/issues"
+Homepage = "https://github.com/This-is-NB/Nebula"
+Repository = "https://github.com/This-is-NB/Nebula"
+Issues = "https://github.com/This-is-NB/Nebula/issues"
 
 [project.scripts]
 pysurf = "pysurf.app:main"
