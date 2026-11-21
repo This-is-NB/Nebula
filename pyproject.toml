@@ -1,17 +1,49 @@
 [build-system]
-requires = ["setuptools>=68"]
+requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "pysurf-browser"
 version = "2.1.0"
-description = "Python-only Qt 6 and Chromium desktop browser"
+description = "Nebula, an open-source Python desktop browser built with PySide6 and Qt WebEngine"
 readme = "README.md"
 requires-python = ">=3.10"
+license = "MIT"
+license-files = ["LICENSE"]
+keywords = [
+    "browser",
+    "chromium",
+    "desktop",
+    "privacy",
+    "pyside6",
+    "qt",
+    "qtwebengine",
+]
+classifiers = [
+    "Environment :: MacOS X",
+    "Environment :: Win32 (MS Windows)",
+    "Environment :: X11 Applications :: Qt",
+    "Intended Audience :: End Users/Desktop",
+    "Operating System :: MacOS",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Internet :: WWW/HTTP :: Browsers",
+]
 dependencies = [
     "PySide6>=6.8",
     "PySide6-WebEngine>=6.8",
 ]
+
+[project.urls]
+Homepage = "https://github.com/This-is-NB/PySurf"
+Repository = "https://github.com/This-is-NB/PySurf"
+Issues = "https://github.com/This-is-NB/PySurf/issues"
 
 [project.scripts]
 pysurf = "pysurf.app:main"

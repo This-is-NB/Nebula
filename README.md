@@ -1,9 +1,24 @@
 # Nebula
 
+[![Tests](https://github.com/This-is-NB/PySurf/actions/workflows/tests.yml/badge.svg)](https://github.com/This-is-NB/PySurf/actions/workflows/tests.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](pyproject.toml)
+
 Nebula is a Python-only desktop browser built with PySide6 and Qt WebEngine
 (Chromium). Its code is organized as a small package so application startup,
 browser UI, privacy controls, persistence, settings, and updates have separate
 responsibilities.
+
+## Features
+
+- Tabbed browsing with movable tabs, close buttons, duplicate, and restore-closed-tab actions.
+- A custom Nebula start page with web search, quick links, and an animated space background.
+- Bookmarks, browsing history, downloads, and session restoration.
+- Private windows that do not save browsing history or session tabs.
+- Light and dark themes, page zoom, and reduced-motion controls.
+- Basic third-party tracker blocking and per-site permission prompts.
+- Controls to clear history, cache, and cookies.
+- Qt WebEngine update checks from the browser settings.
 
 ## Project layout
 
@@ -91,6 +106,21 @@ python -m unittest discover -s tests
 
 The persistence and configuration tests use temporary directories and do not
 modify browser data.
+
+## Contributing
+
+Contributions are welcome. Start with the guide in
+[CONTRIBUTING.md](CONTRIBUTING.md), browse issues marked **good first issue** or
+**help wanted**, and open an issue before making large or behavior-changing
+proposals. Bug reports and feature requests can be submitted with the GitHub
+issue forms.
+
+Maintainers can use [docs/REPOSITORY_SETUP.md](docs/REPOSITORY_SETUP.md) for
+recommended repository topics and release-tag instructions.
+
+## License
+
+Nebula is distributed under the [MIT License](LICENSE).
 
 ## User data and privacy
 
