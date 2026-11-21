@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Nebula</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      font-family: "Segoe UI", "Helvetica Neue", sans-serif;
+      background: #080b17;
+      color: #f7f5ff;
+      font-synthesis: none;
+      text-rendering: optimizeLegibility;
+      --muted: #a7aec7;
+      --line: rgba(209, 218, 255, .13);
+      --cyan: #54e6ef;
+      --purple: #a88aff;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      min-height: 100vh;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse at 50% 20%, rgba(35, 44, 99, .42), transparent 54%),
+        radial-gradient(ellipse at 5% 90%, rgba(0, 173, 194, .13), transparent 43%),
+        #080b17;
+    }
+
+    .sky, .nebula, .orbit {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .sky {
+      opacity: .7;
+      background-image:
+        radial-gradient(1px 1px at 12% 18%, #d5faff 99%, transparent),
+        radial-gradient(1px 1px at 72% 12%, #d8c6ff 99%, transparent),
+        radial-gradient(1.5px 1.5px at 86% 44%, #a9fbff 99%, transparent),
+        radial-gradient(1px 1px at 23% 72%, #d8c6ff 99%, transparent),
+        radial-gradient(1px 1px at 58% 84%, #d5faff 99%, transparent),
+        radial-gradient(1.5px 1.5px at 91% 79%, #d8c6ff 99%, transparent);
+      background-size: 290px 240px, 360px 300px, 410px 330px, 320px 260px, 380px 300px, 470px 360px;
+      animation: star-drift 70s linear infinite;
+    }
+
+    .nebula {
+      inset: -35%;
+      opacity: .28;
+      filter: blur(85px);
+      background:
+        radial-gradient(ellipse at 30% 46%, rgba(28, 121, 219, .54), transparent 28%),
+        radial-gradient(ellipse at 67% 42%, rgba(126, 67, 211, .48), transparent 25%),
+        radial-gradient(ellipse at 58% 72%, rgba(17, 180, 193, .3), transparent 26%);
+      animation: cloud-drift 24s ease-in-out infinite alternate;
+    }
+
+    .orbit {
+      inset: 12% -25%;
+      border: 1px solid rgba(151, 168, 255, .07);
+      border-radius: 50%;
+      transform: rotate(-18deg);
+      box-shadow: 0 0 90px rgba(67, 109, 255, .07), inset 0 0 90px rgba(67, 109, 255, .04);
+    }
+
+    .shell {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      padding: 34px clamp(24px, 6vw, 88px) 24px;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #eef0ff;
+      font-size: 15px;
+      font-weight: 650;
+      letter-spacing: .04em;
+    }
+
+    .mark {
+      display: grid;
+      width: 34px;
+      height: 34px;
+      place-items: center;
+      border: 1px solid rgba(255, 255, 255, .22);
+      border-radius: 11px;
+      background: linear-gradient(140deg, rgba(47, 219, 231, .3), rgba(142, 98, 255, .46));
+      box-shadow: 0 0 25px rgba(95, 116, 255, .25);
+      font-size: 19px;
+      font-weight: 750;
+    }
+
+    .content {
+      width: min(680px, 100%);
+      margin: auto;
+      padding: 44px 0 70px;
+      text-align: center;
+      animation: arrive .8s cubic-bezier(.2, .8, .2, 1) both;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 8px 13px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(18, 24, 47, .58);
+      color: #c7c9e6;
+      font-size: 12px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .pulse {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--cyan);
+      box-shadow: 0 0 13px var(--cyan);
+      animation: pulse 2.4s ease-in-out infinite;
+    }
+
+    h1 {
+      margin: 22px 0 12px;
+      font-size: clamp(42px, 7vw, 70px);
+      font-weight: 650;
+      letter-spacing: -.055em;
+      line-height: 1.04;
+    }
+
+    h1 span {
+      color: transparent;
+      background: linear-gradient(100deg, #f8f6ff 12%, #a9c7ff 47%, #c39bff 76%, #63e9ee);
+      background-clip: text;
+      -webkit-background-clip: text;
+    }
+
+    .intro {
+      margin: 0 auto 30px;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    form {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 9px 8px 20px;
+      border: 1px solid rgba(183, 197, 255, .2);
+      border-radius: 18px;
+      background: rgba(17, 22, 42, .82);
+      box-shadow: 0 16px 70px rgba(0, 0, 0, .28), 0 0 35px rgba(86, 93, 220, .12);
+      transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+    }
+
+    form:focus-within {
+      transform: translateY(-2px);
+      border-color: rgba(84, 230, 239, .62);
+      box-shadow: 0 18px 75px rgba(0, 0, 0, .34), 0 0 35px rgba(84, 230, 239, .13);
+    }
+
+    .search-icon { width: 20px; height: 20px; color: #9aa8ce; flex: none; }
+
+    input {
+      width: 100%;
+      min-width: 0;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: #fff;
+      font: inherit;
+      font-size: 15px;
+    }
+
+    input::placeholder { color: #838ba8; }
+
+    button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      flex: none;
+      min-height: 44px;
+      padding: 0 18px;
+      border: 0;
+      border-radius: 12px;
+      background: linear-gradient(110deg, #38cbd8, #8671ff 82%);
+      color: #09101f;
+      cursor: pointer;
+      font: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      transition: filter .2s ease, transform .2s ease;
+    }
+
+    button:hover { filter: brightness(1.12); transform: translateY(-1px); }
+    button:focus-visible, a:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; }
+
+    .suggestions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 26px;
+    }
+
+    .suggestions a {
+      padding: 9px 14px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(16, 21, 40, .54);
+      color: #c1c6dc;
+      font-size: 13px;
+      text-decoration: none;
+      transition: background .2s ease, border-color .2s ease, color .2s ease;
+    }
+
+    .suggestions a:hover {
+      border-color: rgba(168, 138, 255, .55);
+      background: rgba(84, 74, 152, .26);
+      color: white;
+    }
+
+    footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      color: #777f9b;
+      font-size: 12px;
+    }
+
+    .motion-off *, .motion-off *::before, .motion-off *::after {
+      animation-duration: .01ms !important;
+      animation-iteration-count: 1 !important;
+      scroll-behavior: auto !important;
+      transition-duration: .01ms !important;
+    }
+
+    @keyframes cloud-drift {
+      from { transform: translate3d(-2%, -1%, 0) rotate(-5deg) scale(1); }
+      to { transform: translate3d(3%, 2%, 0) rotate(7deg) scale(1.08); }
+    }
+
+    @keyframes star-drift { to { background-position: 240px -180px, -170px 220px, 130px 310px, -260px -120px, 190px -220px, -120px 170px; } }
+    @keyframes pulse { 50% { opacity: .45; transform: scale(.78); } }
+    @keyframes arrive { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+
+    @media (max-width: 540px) {
+      .shell { padding: 22px 20px 18px; }
+      .content { padding: 34px 0 50px; }
+      form { gap: 8px; padding-left: 14px; }
+      button { min-height: 42px; padding: 0 13px; }
+      footer { font-size: 11px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="sky" aria-hidden="true"></div>
+  <div class="nebula" aria-hidden="true"></div>
+  <div class="orbit" aria-hidden="true"></div>
+  <div class="shell">
+    <header><span class="mark" aria-hidden="true">N</span><span>Nebula</span></header>
+    <main class="content">
+      <div class="eyebrow"><span class="pulse" aria-hidden="true"></span>Your space on the web</div>
+      <h1><span>Find your next</span><br><span>bright idea.</span></h1>
+      <p class="intro">A little space to think. Search the web and see where curiosity takes you.</p>
+      <form id="search" role="search">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <circle cx="10.8" cy="10.8" r="6.8" stroke="currentColor" stroke-width="1.7"/>
+          <path d="m16 16 4.2 4.2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+        </svg>
+        <input id="query" type="search" placeholder="Search or enter a web address" aria-label="Search or enter a web address" autofocus>
+        <button type="submit">Explore <span aria-hidden="true">↗</span></button>
+      </form>
+      <nav class="suggestions" aria-label="Quick links">
+        <a href="https://www.wikipedia.org/">Wikipedia</a>
+        <a href="https://github.com/">GitHub</a>
+        <a href="https://www.youtube.com/">YouTube</a>
+      </nav>
+    </main>
+    <footer><span>Made for the curious</span><span>Search powered by Google</span></footer>
+  </div>
+  <script>
+    const motion = new URLSearchParams(location.search).get("motion");
+    if (motion === "off" || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      document.documentElement.classList.add("motion-off");
+    }
+    document.getElementById("search").addEventListener("submit", (event) => {
+      event.preventDefault();
+      const value = document.getElementById("query").value.trim();
+      if (!value) return;
+      const looksLikeAddress = /^[\w-]+(\.[\w-]+)+([:/?#]|$)/i.test(value);
+      location.href = looksLikeAddress
+        ? (value.includes("://") ? value : `https://${value}`)
+        : `https://www.google.com/search?q=${encodeURIComponent(value)}`;
+    });
+  </script>
+</body>
+</html>

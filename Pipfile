@@ -4,11 +4,5 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-pyqt5 = "*"
-pyqtwebengine = "*"
-pillow = "*"
-
-[dev-packages]
-
-[requires]
-python_version = "3.12"
+pyside6 = "*"
+pyside6-webengine = "*"

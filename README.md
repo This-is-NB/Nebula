@@ -1,102 +1,113 @@
-# Custom Python Web Browser
+# Nebula
 
-A simple web browser built using Python and PyQt5 with basic functionalities such as navigation, bookmarking, history, private browsing, and zoom control.
+Nebula is a Python-only desktop browser built with PySide6 and Qt WebEngine
+(Chromium). Its code is organized as a small package so application startup,
+browser UI, privacy controls, persistence, settings, and updates have separate
+responsibilities.
 
-## Features
+## Project layout
 
-- **Navigation**: Back, forward, reload.
-- **Address Bar**: Enter URLs to navigate to websites.
-- **Zoom Control**: Zoom in and zoom out functionality.
-- **Bookmarks**: Add and view bookmarks.
-- **History**: View browsing history.
-- **Private Browsing**: Toggle private browsing mode.
-- **Custom User Agent**: Set a custom user agent.
-- **Ad Blocking**: Basic ad blocking setup (optional).
+```text
+main.py                 Compatibility launcher
+pysurf/
+  app.py                Application composition and startup
+  browser.py            Browser window and tab workflows
+  chrome.py             Animated toolbar and hover controls
+  config.py             Settings and platform data paths
+  dialogs.py            Settings, history, bookmark, and find dialogs
+  home.html             Animated Nebula start page
+  icons.py              Original vector browser icons
+  migration.py          One-time legacy data migration
+  navigation.py         Address parsing and search
+  privacy.py            Chromium profiles and request filtering
+  storage.py            SQLite history, bookmarks, and sessions
+  theme.py              Shared light/dark design system
+  updater.py            Qt WebEngine package updater
+tests/
+  test_config.py
+  test_migration.py
+  test_navigation.py
+  test_storage.py
+```
 
-## Installation
+The application entry point composes settings and storage once and injects
+those services into the browser window. UI dialogs, privacy/profile setup,
+navigation parsing, and theme styling are isolated in their own modules.
 
-### Prerequisites
+## Interface
 
-- Python 3.7 or higher
-- `pipenv` for managing virtual environments
+The navigation row is intentionally icon-only; hover labels and keyboard
+shortcuts provide context without taking address-bar space. Library actions,
+zoom, privacy mode, appearance, and settings are grouped in the browser menu.
+The Nebula start page features an animated, space-inspired background and quick
+web search. Settings are organized into General, Privacy, Appearance, and
+Updates pages.
+The toolbar and active-tab underline use original, abstract energy-streak
+animations. Turn all motion off in **Menu → Settings → Appearance**.
 
-### Steps
+Useful shortcuts: `Ctrl+L` address bar, `Ctrl+T` new tab, `Ctrl+W` close tab,
+`Ctrl+F` find, `Ctrl+H` history, `Ctrl+D` bookmark, and `Ctrl+Shift+P` private
+window.
 
-1. Clone the repository:
+## Screenshots and animations
 
-    ```bash
-    git clone https://github.com/yourusername/custom-python-web-browser.git
-    cd custom-python-web-browser
-    ```
+The Nebula start page combines a drifting starfield, softly moving nebula
+clouds, a pulsing accent, and subtle entrance and hover transitions. The
+toolbar and active-tab indicator add lightweight motion throughout browsing.
+Disable these effects in **Menu → Settings → Appearance**; the start page also
+respects the operating system's reduced-motion preference.
 
-2. Create and activate a virtual environment using `pipenv`:
+![Animated Nebula start page](screenshots/nebula-home-animation.gif)
 
-    ```bash
-    pip install pipenv
-    pipenv --python 3.12.3
-    pipenv install
-    pipenv shell
-    ```
+![Nebula start page](screenshots/nebula-home.png)
 
-3. Install the required packages:
+![Nebula settings](screenshots/nebula-settings.png)
 
-    ```bash
-    pipenv install PyQt5 PyQtWebEngine
-    ```
+## Install and run
 
-4. Run the application:
+Use the project virtual environment so the interpreter running Nebula also has
+Qt WebEngine installed:
 
-    ```bash
-    python main.py
-    ```
+```powershell
+pipenv install
+pipenv run python main.py
+```
 
-## Usage
+Or install the package with pip:
 
-- **Back**: Navigate to the previous page.
-- **Forward**: Navigate to the next page.
-- **Reload**: Reload the current page.
-- **Address Bar**: Enter the URL and press Enter to navigate.
-- **Zoom In**: Increase the zoom level of the page.
-- **Zoom Out**: Decrease the zoom level of the page.
-- **Bookmark**: Add the current page to bookmarks.
-- **History**: View browsing history.
-- **Private Mode**: Toggle private browsing mode.
+```powershell
+python -m pip install -e .
+python main.py
+```
 
-## Code Overview
+The `pysurf` command and `python -m pysurf` entry points are also available
+after installation.
 
-### `main.py`
+## Tests
 
-The main script that initializes and runs the web browser application. It sets up the UI, connects actions to buttons, and manages the browser's state.
+```powershell
+python -m unittest discover -s tests
+```
 
-#### Key Methods
+The persistence and configuration tests use temporary directories and do not
+modify browser data.
 
-- `__init__`: Sets up the main window, navigation bar, and connects signals.
-- `setup_profile`: Configures the web engine profile for ad blocking and user agent.
-- `navigate_to_url`: Navigates to the URL entered in the address bar.
-- `update_url`: Updates the address bar with the current URL.
-- `add_bookmark`: Adds the current page to bookmarks.
-- `show_history`: Prints the browsing history.
-- `toggle_private_mode`: Toggles private browsing mode.
-- `zoom_in`: Increases the zoom level.
-- `zoom_out`: Decreases the zoom level.
-- `reload_page`: Reloads the current page.
-- `apply_zoom_factor`: Applies the current zoom factor to the browser.
+## User data and privacy
 
-## Contributing
+Settings, SQLite data, Chromium cache, and persistent web storage are stored in
+the platform's per-user application data directory. Set `PYSURF_DATA_DIR` to
+override it. On first startup, Nebula copies compatible database, settings, and
+web-storage data from the earlier repository-local `PySurfData` directory;
+the original files are left untouched.
 
-1. Fork the repository.
-2. Create a new branch (`git checkout -b feature-branch`).
-3. Make your changes.
-4. Commit your changes (`git commit -am 'Add new feature'`).
-5. Push to the branch (`git push origin feature-branch`).
-6. Create a new Pull Request.
+Private windows use off-the-record profiles and do not save browsing history or
+session tabs. The built-in tracker filter blocks a short list of hostnames; it
+is not comprehensive tracking protection. Qt WebEngine supplies Chromium's
+process isolation and sandboxing.
 
-## License
+## Chromium / Qt WebEngine updates
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Acknowledgements
-
-- PyQt5 documentation
-- Stack Overflow community
-
+The updater upgrades `PySide6` and `PySide6-WebEngine` from PyPI, then offers to
+restart the browser. The WebEngine wheel carries its Chromium build; this is a
+package update, not a standalone Chromium downloader. Keep Nebula's dependencies
+updated through Pipenv or pip as well.
